@@ -1,3 +1,3 @@
 from wikiCrawler import *
 a = artistInfo()
-a.getTracks('Rodrigo y Gabriela')
+t = a.getTracks('Rodrigo y Gabriela')
