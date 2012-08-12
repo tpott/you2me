@@ -17,14 +17,22 @@ def prune(a, x):
 		a.append(x)
 	return a
 
-def table2dict(tbl):
+def table2dicts(tbl):
 	"""Returns a list of dictionaries. This table requires the first
 	row contain headers for the columns"""
 	rows = tbl.findAll('tr')
 	row1 = rows[0]
 	headers = row1.findAll('th')
+	# finds all the headers for each of the columns
 	keys = map(lambda h: h.string, headers)
 	rows = rows[1:]
+	dicts = []
+	for r in rows:
+		cols = r.findAll('td')
+		vals = map(lambda col: col.string, cols)
+		d = dict(zip(keys, vals))
+		dicts.append(d)
+	return dicts
 
 def table2list(tbl):
 	"""Returns a list of lists"""
@@ -39,9 +47,10 @@ class artistInfo(object):
 		self.br.addheaders = [('User-agent', 'PyBros_Music')]
 		self.br.set_handle_robots(False)
 
+	# call level 3
 	def _parse(self, html):
 		soup = bs(html)
-		table = soup.find('table', class='tracklist')
+		table = soup.find('table', attrs={'class':'tracklist'})
 		tracks = table2dicts(table)
 		return map(lambda d: track(d), tracks)
 
@@ -60,11 +69,13 @@ class artistInfo(object):
 		a['url'] = _wiki + relurl
 		return a
 
+	# call level 2
 	def _tracks(self, p):
 		"""p points to the current tag. pages is a list of tuples. the 
 		tuples are group * list of track info"""
 		self.pages = []
 		grouping = ''
+		# looks for albumn link information
 		while p.name != 'h2':
 			if p.name == 'h3':
 				grouping = p.contents[2].string
@@ -80,6 +91,7 @@ class artistInfo(object):
 		albums = [ album for group in self.pages for album in group[1] ]
 		for album in albums:
 			try:
+				print 'Opening:', album['title']
 				self.br.open(album['url'])
 				# _parse returns a list of track objects
 				album['tracks'] = self._parse(self.br.response().read())
@@ -88,6 +100,7 @@ class artistInfo(object):
 		self.albums = albums
 		return albums
 
+	# call level 1
 	def getTracks(self, artist_name):
 		"""Returns a list of tracks, where each one represents
 		some track info that should be retrieved."""

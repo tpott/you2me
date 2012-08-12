@@ -1,0 +1,17 @@
+you2me
+
+a music library creation tool
+
+Manuel Corona Ayala
+Trevor Pottinger
+Summer 2012
+
+
+
+you2me.py is the meta wrapper for the package
+
+wikiCrawler contains 2 crawlers that look for album info and track info
+
+youSearcher uses track info to search for tracks on youtube
+
+dispatch uses the youtube links to convert into mp3
