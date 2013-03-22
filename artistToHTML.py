@@ -17,7 +17,25 @@ import sys
 
 from wikiCrawler import Artist
 
+def convertToHTML(info):
+	"""Converts a 2 dimensional list into HTML. Requires
+	1) each item in info is an Album
+	1a) each Album has a name
+	2) each item in an Album is a Track
+	2a) each Track has a name
+	2b) each Track has a link"""
+	string = "<ul id=\"albums\">"
+	for album in info:
+		string += "<li><h2>" + album.name +"</h2><br /><ol>"
+		for track in album:
+			string += "<li><a href=\"" + track.link + \
+					"\">" + track.name + "</a></li>"
+		string += "</ol></li>"
+	string += "</ul>"
+	return string
+
 def genHTML(artist):
+	artistInfo = convertToHTML(artist.albums)
 	print """
 <html>
 	<head>
@@ -29,7 +47,7 @@ def genHTML(artist):
 		{artistInfo}
 	</body>
 </html>
-""".format(artistName= artist.name, artistInfo= artist.info)
+""".format(artistName=artist.name, artistInfo=artistInfo)
 
 if __name__ == '__main__':
 	genHTML(Artist(sys.argv[1]))

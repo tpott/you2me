@@ -7,6 +7,12 @@ Trevor Pottinger
 Summer 2012
 
 
+Updated syntax:
+./artistToHTML.py Deadmau5 > example.html
+
+Run artistToHTML.py with an artist's name (must match wikipedia's 
+URL) and redirect to the desired result file.
+
 
 you2me.py is the meta wrapper for the package
 
