@@ -41,6 +41,11 @@ def table2list(tbl):
 import mechanize as mech
 from BeautifulSoup import BeautifulSoup as bs
 
+class Artist(object):
+	def __init__(self, name):
+		self.name = name
+		self.info = "My name = %s." % name
+
 class artistInfo(object):
 	def __init__(self):
 		self.br = mech.Browser()
