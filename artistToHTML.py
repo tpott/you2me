@@ -24,13 +24,13 @@ def convertToHTML(info):
 	2) each item in an Album is a Track
 	2a) each Track has a name
 	2b) each Track has a link"""
-	string = "<ul id=\"albums\">"
+	string = "<ul id=\"albums\">\n"
 	for album in info:
-		string += "<li><h2>" + album.name +"</h2><br /><ol>"
+		string += "\t<li><h2>" + album.name +"</h2><br />\n\t\t<ol>\n"
 		for track in album:
-			string += "<li><a href=\"" + track.link + \
-					"\">" + track.name + "</a></li>"
-		string += "</ol></li>"
+			string += "\t\t\t<li><a href=\"" + track.link + \
+					"\">" + track.name + "</a></li>\n"
+		string += "\t\t</ol>\n\t</li>\n"
 	string += "</ul>"
 	return string
 
