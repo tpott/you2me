@@ -1,0 +1,9 @@
+{
+  "name": "you2me",
+  "description": "Create youtube playlists using artist wikipedia pages",
+  "version": "0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x"
+  }
+}
