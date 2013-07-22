@@ -10,6 +10,10 @@
  * Sun Jul 21 15:42:20 PDT 2013
  */
 
+var crypto = require('crypto');
+
+var ncalls = 0;
+
 // copied from
 // https://github.com/tpott/butter-star/blob/master/server/objects/random.js
 function random(length) {
@@ -37,4 +41,29 @@ function SearchObject(searchText) {
 	this.searchText = searchText;
 	this.searchTime = process.hrtime();
 	this.uniqueURL = random(8);
+
+	this.html = '<html><h1>No results :(';
+	this.finished = false;
+
+	history[this.uniqueURL] = this;
 }
+
+SearchObject.prototype.isFinished = function() {
+	if (this.finished) {
+		return true;
+	}
+	else {
+		this.finished = true;
+		return false;
+	}
+}
+
+function urlExists(url) {
+	return url.length == 8;
+}
+
+var history = {};
+
+module.exports = SearchObject;
+module.exports.urlExists = urlExists;
+module.exports.history = history;
