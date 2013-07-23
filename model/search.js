@@ -10,7 +10,8 @@
  * Sun Jul 21 15:42:20 PDT 2013
  */
 
-var crypto = require('crypto');
+var crypto = require('crypto'),
+	 proc = require('child_process');
 
 var ncalls = 0;
 
@@ -41,29 +42,54 @@ function SearchObject(searchText) {
 	this.searchText = searchText;
 	this.searchTime = process.hrtime();
 	this.uniqueURL = random(8);
+	this.config = SearchObject.conf;
 
-	this.html = '<html><h1>No results :(';
+	this.html = '<html><h1>No results :(</h1></html>';
+	this._partial = '';
 	this.finished = false;
+
+	this.start();
 
 	history[this.uniqueURL] = this;
 }
 
+SearchObject.prototype.start = function() {
+	var self = this; 
+
+	switch(this.config.lang) {
+		case 'python':
+			var child = proc.spawn('./artistToHTML.py', [ this.searchText ]);
+			child.stdout.on('data', function(buf) {
+				self._partial += buf.toString();
+			});
+			child.on('close', function() {
+				self.html = self._partial;
+				self.finished = true;
+			});
+			break;
+		default:
+			self.html = self._partial;
+			self.finished = true;
+			break;
+	}
+};
+
 SearchObject.prototype.isFinished = function() {
-	if (this.finished) {
-		return true;
-	}
-	else {
-		this.finished = true;
-		return false;
-	}
-}
+	return this.finished;
+};
+
+function setConfig(conf) {
+	SearchObject.conf = conf;
+};
 
 function urlExists(url) {
 	return url.length == 8;
 }
 
 var history = {};
+SearchObject.conf = {};
 
 module.exports = SearchObject;
 module.exports.urlExists = urlExists;
 module.exports.history = history;
+module.exports.setConfig = setConfig;

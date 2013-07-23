@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<title>Redirect</title>
+		<script>
+			setTimeout(function() {
+				window.location = "<%= url %>";
+			},
+			10000);
+		</script>
+	</head>
+	<body>
+		<p>You tried to search for: <%= text %></p>
+		<!--<p>ERROR: Unable to read post variables</p>-->
+		<p>Redirecting to "<a href="<%= url %>"><%= url %></a>".</p>
+	</body>
+</html>
